@@ -1,0 +1,42 @@
+{
+  "name": "detox-jest-spy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/server.js",
+  "types": "dist/server.d.ts",
+  "scripts": {
+    "test": "jest",
+    "start": "tsc -w",
+    "build": "tsc"
+  },
+  "keywords": [
+    "jest",
+    "detox",
+    "spy",
+    "mock",
+    "test"
+  ],
+  "author": "Pedro Solá <p3dro.sola@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "7.1.2",
+    "@babel/runtime": "7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/axios": "^0.14.0",
+    "@types/body-parser": "^1.17.0",
+    "@types/connect": "^3.4.32",
+    "@types/jest": "^23.3.13",
+    "@types/node-fetch": "^2.1.4",
+    "babel-jest": "^24.0.0",
+    "jest": "^24.0.0",
+    "node-fetch": "^2.3.0",
+    "ts-jest": "^23.10.5",
+    "typescript": "^3.2.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "connect": "^3.6.6",
+    "http": "^0.0.0"
+  }
+}
