@@ -1,4 +1,4 @@
 node_modules
 /dist
-/coverage
+/test-results
 .DS_Store
