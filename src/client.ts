@@ -1,37 +1,26 @@
-const DEFAULT_OPTIONS = {
+interface Options {
+  server?: string;
+}
+const DEFAULT_OPTIONS: Options = {
   server: "http://localhost:62556"
 };
 
-interface Options {
-  server: string;
+// all the state
+let options = Object.assign({}, DEFAULT_OPTIONS);
+
+export function configure(configOptions: Options = {}) {
+  options = Object.assign({}, DEFAULT_OPTIONS, configOptions);
 }
 
-export default class Client {
-  options: Options = DEFAULT_OPTIONS;
-  configure(options: Options) {
-    Object.assign(this.options, options);
-    return this;
-  }
-
-  track(name: string, args: any[] = []) {
-    fetch(`${this.options!.server}/track`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        call: name,
-        arguments: args
-      })
-    });
-  }
-
-  // singleton
-  private static instance?: Client;
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new Client();
-    }
-    return this.instance;
-  }
+export function track(name: string, args: any[] = []) {
+  return fetch(`${options.server}/track`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      call: name,
+      arguments: args
+    })
+  });
 }

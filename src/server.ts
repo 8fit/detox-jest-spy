@@ -3,59 +3,52 @@ import http from "http";
 import bodyParser from "body-parser";
 
 interface Options {
-  port: number;
+  port?: number;
 }
 
 const defaultOptions: Options = {
   port: 62556
 };
 
-export default class DetoxJestSpy {
-  options = defaultOptions;
-  server?: http.Server;
+// all state is captured in these two variables
+let server: http.Server | null = null;
+let spies = new Map();
 
-  configure(options: Options) {
-    this.options = Object.assign(this.options, options);
-    return this;
+export function start(startOptions: Options = {}) {
+  if (server) {
+    throw new Error("Server is already started");
   }
 
-  startServer() {
-    var app = connect();
-    app.use(bodyParser.json());
+  const options = Object.assign({}, defaultOptions, startOptions);
 
-    app.use("/track", (req: any, res: any) => {
-      console.log("Track detox-jest-spy", req.body);
+  var app = connect();
+  app.use(bodyParser.json());
 
-      const spy = this.getSpy(req.body.call); // TODO validate req.body
-      spy.apply(undefined, req.body.arguments || []);
-      res.end();
-    });
+  app.use("/track", (req: any, res: any) => {
+    console.log("Track detox-jest-spy", req.body);
 
-    this.server = http.createServer(app);
-    this.server.listen(this.options!.port);
-    console.log("Starting detox-jest-spy server", this.options);
-    return this;
+    const spy = getSpy(req.body.call); // TODO validate req.body
+    spy.apply(undefined, req.body.arguments || []);
+    res.end();
+  });
+
+  server = http.createServer(app);
+  server.listen(options.port);
+  console.log("Starting detox-jest-spy server", options);
+}
+
+export function stop() {
+  if (!server) {
+    throw new Error("Server is already stopped");
   }
+  server.close();
+  server = null;
+  spies.clear();
+}
 
-  closeServer() {
-    console.log("Stopping detox-jest-spy server");
-    this.server!.close();
+export function getSpy(name: string) {
+  if (!spies.has(name)) {
+    spies.set(name, jest.fn());
   }
-
-  private spies = new Map();
-  getSpy(name: string) {
-    if (!this.spies.has(name)) {
-      this.spies.set(name, jest.fn());
-    }
-    return this.spies.get(name);
-  }
-
-  // singleton
-  private static instance?: DetoxJestSpy;
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new DetoxJestSpy();
-    }
-    return this.instance;
-  }
+  return spies.get(name);
 }
