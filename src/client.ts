@@ -5,7 +5,7 @@ const DEFAULT_OPTIONS: Options = {
   server: "http://localhost:62556"
 };
 
-// all the state
+// state
 let options = Object.assign({}, DEFAULT_OPTIONS);
 
 export function configure(configOptions: Options = {}) {

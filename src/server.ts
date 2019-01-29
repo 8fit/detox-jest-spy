@@ -6,16 +6,20 @@ interface Options {
   port?: number;
 }
 
+interface State {
+  server: http.Server;
+  spies: Map<string, jest.Mock>;
+}
+
 const defaultOptions: Options = {
   port: 62556
 };
 
-// all state is captured in these two variables
-let server: http.Server | null = null;
-let spies = new Map();
+// all state is contained in this variable
+let state: State | undefined;
 
 export function start(startOptions: Options = {}) {
-  if (server) {
+  if (state) {
     throw new Error("Server is already started");
   }
 
@@ -32,23 +36,31 @@ export function start(startOptions: Options = {}) {
     res.end();
   });
 
-  server = http.createServer(app);
+  const server = http.createServer(app);
   server.listen(options.port);
+
+  state = {
+    server,
+    spies: new Map()
+  };
+
   console.log("Starting detox-jest-spy server", options);
 }
 
 export function stop() {
-  if (!server) {
+  if (!state) {
     throw new Error("Server is already stopped");
   }
-  server.close();
-  server = null;
-  spies.clear();
+  state.server.close();
+  state = undefined;
 }
 
 export function getSpy(name: string) {
-  if (!spies.has(name)) {
-    spies.set(name, jest.fn());
+  if (!state) {
+    throw new Error("Server is not started");
   }
-  return spies.get(name);
+  if (!state.spies.has(name)) {
+    state.spies.set(name, jest.fn());
+  }
+  return state.spies.get(name) as jest.Mock;
 }
