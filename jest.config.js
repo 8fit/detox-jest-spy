@@ -3,5 +3,6 @@ module.exports = {
   testEnvironment: "node",
   testPathIgnorePatterns: ["/dist/"],
   collectCoverage: true,
-  collectCoverageFrom: ["src/**/*.ts"]
+  collectCoverageFrom: ["src/**/*.ts"],
+  reporters: ["default", "jest-junit"]
 };
