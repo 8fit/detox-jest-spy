@@ -29,9 +29,7 @@ export function start(startOptions: Options = {}) {
   app.use(bodyParser.json());
 
   app.use("/track", (req: any, res: any) => {
-    console.log("Track detox-jest-spy", req.body);
-
-    const spy = getSpy(req.body.call); // TODO validate req.body
+    const spy = getSpy(req.body.call);
     spy.apply(undefined, req.body.arguments || []);
     res.end();
   });
