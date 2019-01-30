@@ -16,6 +16,10 @@
     "mock",
     "test"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/8fit/detox-jest-spy.git"
+  },
   "author": "Pedro Solá <p3dro.sola@gmail.com>",
   "license": "ISC",
   "devDependencies": {
@@ -23,7 +27,6 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-typescript": "^7.1.0",
     "@babel/runtime": "7.1.2",
-    "@types/axios": "^0.14.0",
     "@types/body-parser": "^1.17.0",
     "@types/connect": "^3.4.32",
     "@types/jest": "^23.3.13",
