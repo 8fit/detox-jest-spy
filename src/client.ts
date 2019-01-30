@@ -40,8 +40,8 @@ export function getProxy(name: string) {
   return new Proxy(
     {},
     {
-      get: (target, prop, args) => {
-        return () => {
+      get: (target, prop) => {
+        return (...args: any[]) => {
           track(`${name}.${prop.toString()}`, args);
         };
       }
