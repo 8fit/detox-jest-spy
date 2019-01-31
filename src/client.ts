@@ -1,10 +1,13 @@
+import { Platform } from "react-native";
 interface Options {
   server?: string;
 }
 const DEFAULT_OPTIONS: Options = {
-  server: "http://localhost:62556"
+  server: Platform.select({
+    ios: "http://localhost:62556",
+    android: "http://10.0.2.2:62556"
+  })
 };
-
 // state
 let options = Object.assign({}, DEFAULT_OPTIONS);
 

@@ -1,6 +1,11 @@
-import { configure, track, getProxy } from "../client";
-
+jest.mock("react-native", () => ({
+  Platform: {
+    select: ({ ios, android }: { ios: any; android: any }) => ios
+  }
+}));
 (global as any).fetch = jest.fn();
+
+const { configure, track, getProxy } = require("../client");
 
 describe("Client", () => {
   afterEach(() => {
