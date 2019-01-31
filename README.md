@@ -14,6 +14,10 @@ We use [Detox mocking](https://github.com/wix/Detox/blob/master/docs/Guide.Mocki
 
 ![detox jest spy](https://user-images.githubusercontent.com/520550/51997761-a5c0c580-24b7-11e9-838f-6b3d54ad6f9c.png)
 
+## Install
+
+`npm install --save detox-jest-spy`
+
 ## Usage
 
 The first thing we'll do is use Detox mocking to replace a file with the detox proxy implementation.
@@ -42,27 +46,33 @@ import { getProxy } from "detox-jest-spy/dist/client";
 export default getProxy("Analytics");
 ```
 
-Ensure you add `RN_SRC_EXT` to your build commands as indicated in the docs.
+Ensure you add `RN_SRC_EXT` to your build commands as indicated in the [docs](https://github.com/wix/Detox/blob/master/docs/Guide.Mocking.md) so that the detox build will use the `e2e.js` file instead of the usual one.
 
-In your detox test file
+Then you can write your detox tests:
 
 ```js
 // myfeature.smoke.spec.js
 
 import { start, stop, getSpy } from "detox-jest-spy";
+// detox overrides the global expect variable with it's own implementation, so we need to reimport it under another name
+import default as jestExpect from 'expect';
 
 beforeAll(() => {
   start(); // start the detox-jest-spy server
 });
 
 afterAll(() => {
-  stop();
+  stop(); // stop the server after test run is complete
 });
 
 it("does somethin", async () => {
-  // perform the usual detox orchetration
+  // perform the usual detox UI orchetration
   await this.getElementById("myid").tap();
 
-  getSpy("Analytics.trackAction", { id: "myid" });
+  // get the jest spy object
+  const spy = getSpy("Analytics.trackAction");
+
+  // use jest expect to perform assertions on the spy
+  jestExpect(spy).toBeCalledWith({ id: 'myid' });
 });
 ```
