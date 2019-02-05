@@ -4,8 +4,8 @@ interface Options {
 }
 const DEFAULT_OPTIONS: Options = {
   server: Platform.select({
-    ios: "http://localhost:62556",
-    android: "http://10.0.2.2:62556"
+    ios: "http://localhost:62556", // iOS simulator uses same network
+    android: "http://10.0.2.2:62556" // Android emulator loopback address
   })
 };
 // state
