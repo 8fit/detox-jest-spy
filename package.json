@@ -1,6 +1,6 @@
 {
   "name": "detox-jest-spy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/server.js",
   "types": "dist/server.d.ts",
