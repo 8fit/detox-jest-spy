@@ -11,7 +11,7 @@ jobs:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: yarn install --frozen-lockfile
+          command: yarn install --frozen-lockfile && npm install react-native
       - run:
           name: Unit tests
           command: yarn jest --ci
