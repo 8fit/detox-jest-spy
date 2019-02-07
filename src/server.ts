@@ -2,6 +2,8 @@ import connect from "connect";
 import http from "http";
 import bodyParser from "body-parser";
 
+export const jestExpect = require("expect");
+
 interface Options {
   port?: number;
 }
@@ -61,4 +63,9 @@ export function getSpy(name: string) {
     state.spies.set(name, jest.fn());
   }
   return state.spies.get(name) as jest.Mock;
+}
+
+export function expectSpy(name: string) {
+  const spy = getSpy(name);
+  return jestExpect(spy);
 }

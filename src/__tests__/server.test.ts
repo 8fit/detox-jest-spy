@@ -1,4 +1,4 @@
-import { start, stop, getSpy } from "../server";
+import { start, stop, getSpy, expectSpy } from "../server";
 import fetch from "node-fetch";
 
 describe("Server", () => {
@@ -55,6 +55,32 @@ describe("Server", () => {
       });
 
       expect(spy).toBeCalledWith(1, "2", { obj: 3 });
+    });
+  });
+
+  describe("spies", () => {
+    beforeAll(() => {
+      start();
+    });
+
+    afterAll(() => {
+      stop();
+    });
+
+    describe("expectSpy", () => {
+      it("returns a jest expectation on the spy", () => {
+        const spy = getSpy("test2");
+        spy("arg");
+        expectSpy("test2").toBeCalledWith("arg");
+      });
+    });
+
+    describe("getSpy", () => {
+      it("returns a jest spy", () => {
+        const spy = getSpy("test3");
+        spy("arg");
+        expect(spy).toBeCalledWith("arg");
+      });
     });
   });
 });
